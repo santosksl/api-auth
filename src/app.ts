@@ -2,6 +2,7 @@ import fastify from 'fastify';
 import { ZodError } from 'zod';
 import { Server } from 'http';
 import { Database } from './database';
+import { UserModel } from './models/User';
 
 class SetupApplication {
     private server?: Server;
@@ -32,6 +33,7 @@ class SetupApplication {
 
     private async setupFastify() {
         await Database.getInstance();
+        UserModel.createModel();
     }
 
     private setupRoutes() {}
