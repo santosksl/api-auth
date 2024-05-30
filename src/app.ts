@@ -1,9 +1,11 @@
 import fastify from 'fastify';
 import { ZodError } from 'zod';
 import { Server } from 'http';
+import { Database } from './database';
 
 class SetupApplication {
     private server?: Server;
+
     constructor(
         private port: number,
         public app = fastify(),
@@ -29,11 +31,10 @@ class SetupApplication {
     }
 
     private async setupFastify() {
-
+        await Database.getInstance();
     }
 
-    private setupRoutes() {
-    }
+    private setupRoutes() {}
 
     public startApplication() {
         this.app
@@ -41,8 +42,8 @@ class SetupApplication {
                 host: '0.0.0.0',
                 port: this.port,
             })
-            .then(() => {
-                console.log('🚀 HTTP Server Running!');
+            .then((address) => {
+                console.log(`🚀 HTTP Server Running!\n🎯 Address: ${address}`);
             });
     }
 }
