@@ -1,7 +1,7 @@
-import { hash } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { FieldPacket, RowDataPacket } from 'mysql2';
 import { Database } from '../database';
-import { IUserDTO, IUserRepository } from './IUserRepository';
+import { IAuthUserDTO, IUserDTO, IUserRepository } from './IUserRepository';
 
 class UserRepository implements IUserRepository {
     private static instance: UserRepository;
@@ -41,6 +41,31 @@ class UserRepository implements IUserRepository {
         );
 
         return query.length > 0;
+    }
+
+    public async validatePasswordWithHash({
+        email,
+        password,
+    }: IAuthUserDTO): Promise<boolean> {
+        const SELECT = 'SELECT password_hash FROM users WHERE email = ?';
+        const db = await Database.getInstance();
+        const conn = await db.getConnection();
+
+        const [query]: [RowDataPacket[], FieldPacket[]] = await conn.execute(
+            SELECT,
+            [email],
+        );
+
+        if (query.length > 0) {
+            query[0][0] as string;
+            const comparePasswordWithHash = await compare(
+                password,
+                query[0][0],
+            );
+            return !!comparePasswordWithHash;
+        } else {
+            return false;
+        }
     }
 }
 
