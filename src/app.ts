@@ -1,7 +1,8 @@
 import fastify from 'fastify';
-import { ZodError } from 'zod';
 import { Server } from 'http';
+import { ZodError } from 'zod';
 import { Database } from './database';
+import { Routes } from './http/routes';
 import { UserModel } from './models/User';
 
 class SetupApplication {
@@ -36,7 +37,9 @@ class SetupApplication {
         UserModel.createModel();
     }
 
-    private setupRoutes() {}
+    private setupRoutes() {
+        Routes.RegisterRoutes(this.app);
+    }
 
     public startApplication() {
         this.app

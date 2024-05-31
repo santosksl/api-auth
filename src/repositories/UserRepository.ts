@@ -27,10 +27,6 @@ class UserRepository implements IUserRepository {
 
         await conn.query(INSERT, [name, email, passwordHash]);
 
-        console.log('name', name);
-        console.log('email', email);
-        console.log('password', password);
-
         return { name, email, password };
     }
 
