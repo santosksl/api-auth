@@ -1,7 +1,7 @@
+import { hash } from 'bcryptjs';
 import { FieldPacket, RowDataPacket } from 'mysql2';
 import { Database } from '../database';
-import { IUserRepository, IUserDTO } from './IUserRepository';
-import { hash } from 'bcryptjs';
+import { IUserDTO, IUserRepository } from './IUserRepository';
 
 class UserRepository implements IUserRepository {
     private static instance: UserRepository;
@@ -25,7 +25,11 @@ class UserRepository implements IUserRepository {
         const conn = await db.getConnection();
         const passwordHash = await hash(password, 6);
 
-        conn.query(INSERT, [name, email, passwordHash]);
+        await conn.query(INSERT, [name, email, passwordHash]);
+
+        console.log('name', name);
+        console.log('email', email);
+        console.log('password', password);
 
         return { name, email, password };
     }
