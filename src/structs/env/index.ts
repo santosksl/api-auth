@@ -6,6 +6,7 @@ const envSchema = z.object({
     MYSQL_USER: z.string().default(process.env.MYSQL_USER),
     MYSQL_PASSWORD: z.string().default(process.env.MYSQL_PASSWORD),
     MYSQL_DATABASE: z.string().default(process.env.MYSQL_DATABASE),
+    JWT_SECRET_KEY: z.string().default(process.env.JWT_SECRET_KEY),
 });
 
 const _env = envSchema.safeParse(process.env);

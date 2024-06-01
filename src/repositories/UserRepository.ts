@@ -67,6 +67,25 @@ class UserRepository implements IUserRepository {
             return false;
         }
     }
+
+    public async getUserId(emailForQuery: string): Promise<number> {
+        const SELECT = 'SELECT id FROM users WHERE email = ?';
+        const db = await Database.getInstance();
+        const conn = await db.getConnection();
+
+        const [query]: [RowDataPacket[], FieldPacket[]] = await conn.execute(
+            SELECT,
+            [emailForQuery],
+        );
+
+        if (query.length > 0) {
+            query[0][0] as number;
+            console.log('Typeof Query:', typeof query[0][0]);
+            return query[0][0];
+        } else {
+            return -1;
+        }
+    }
 }
 
 export { UserRepository };

@@ -5,6 +5,7 @@ interface IUserDTO {
 }
 
 interface IAuthUserDTO {
+    id?: number;
     email: string;
     password: string;
 }
@@ -16,6 +17,7 @@ interface IUserRepository {
         email,
         password,
     }: IAuthUserDTO): Promise<boolean>;
+    getUserId(emailForQuery: string): Promise<number>;
 }
 
 export { IAuthUserDTO, IUserDTO, IUserRepository };

@@ -18,13 +18,25 @@ class AuthenticateUserController {
         const { email, password } = authBodySchema.parse(request.body);
 
         try {
-            await this.authenticateUserUseCase.execute({
+            const { user } = await this.authenticateUserUseCase.execute({
                 password,
                 email,
             });
-            return reply
-                .status(200)
-                .send({ message: '✔️ The user has been logged in' });
+
+            const token = await reply.jwtSign(
+                {},
+                {
+                    sign: {
+                        sub: `${user.id}`,
+                    },
+                },
+            );
+
+            return reply.status(200).send({
+                message: '✔️ The user has been logged in',
+                user,
+                token,
+            });
         } catch (err) {
             if (err instanceof InvalidCredentialsError) {
                 return reply.status(409).send({ message: err.message });

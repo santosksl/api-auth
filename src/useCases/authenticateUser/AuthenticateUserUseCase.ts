@@ -28,10 +28,15 @@ class AuthenticateUserUseCase {
             throw new InvalidCredentialsError();
         }
 
+        const id = await this.userRepository.getUserId(email);
+
         const user = {
+            id,
             email,
             password,
         };
+
+        console.log('UserID', user.id);
 
         return { user };
     }

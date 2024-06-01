@@ -14,4 +14,6 @@ const authUserRepository = UserRepository.getInstance();
 const authUserUseCase = new AuthenticateUserUseCase(authUserRepository);
 const authUserController = new AuthenticateUserController(authUserUseCase);
 
+// Profile
+
 export { authUserController, createUserController };
